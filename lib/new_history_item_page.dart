@@ -50,77 +50,79 @@ class _NewHistoryItemPageState extends State<NewHistoryItemPage> {
         appBar: AppBar(
           title: Text("Yeni Kayıt"),
         ),
-        body: Column(
-          children: <Widget>[
-            CheckboxListTile(
-              value: _value1,
-              onChanged: _value1Changed,
-              title: Text("Elektrik şalterini aç"),
-            ),
-            CheckboxListTile(
-              value: _value2,
-              onChanged: _value2Changed,
-              title: Text("Bahçe musluğunu aç"),
-            ),
-            CheckboxListTile(
-              value: _value3,
-              onChanged: _value3Changed,
-              title: Text("Sıcak suyu akıt"),
-            ),
-            CheckboxListTile(
-              value: _value4,
-              onChanged: _value4Changed,
-              title: Text("Evi havalandır"),
-            ),
-            CheckboxListTile(
-              value: _value5,
-              onChanged: _value5Changed,
-              title: Text("Tuvalet sifonlarına bas"),
-            ),
-            CheckboxListTile(
-              value: _value6,
-              onChanged: _value6Changed,
-              title: Text("Merdiven altını aç"),
-            ),
-            CheckboxListTile(
-              value: _value7,
-              onChanged: _value7Changed,
-              title: Text("Bahçeyi sula"),
-            ),
-            CheckboxListTile(
-              value: _value8,
-              onChanged: _value8Changed,
-              title: Text("Merdiven altını kilitle"),
-            ),
-            CheckboxListTile(
-              value: _value9,
-              onChanged: _value9Changed,
-              title: Text("Camları kapat"),
-            ),
-            CheckboxListTile(
-              value: _value10,
-              onChanged: _value10Changed,
-              title: Text("Şalteri indir"),
-            ),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 60,
-                child: RaisedButton(
-                  child: Text("Kaydet"),
-                  onPressed: () {
-                    if (completed()) {
-                      Hive.box("timesheets").add(History(DateTime.now()));
-                      Navigator.pop(context);
-                    } else {
-                      _showDialog();
-                    }
-                  },
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              ListItem(
+                checked: _value1,
+                onChange: _value1Changed,
+                text: "Elektrik şalterini aç",
+              ),
+              ListItem(
+                checked: _value2,
+                onChange: _value2Changed,
+                text: "Bahçe musluğunu aç",
+              ),
+              ListItem(
+                checked: _value3,
+                onChange: _value3Changed,
+                text: "Sıcak suyu akıt",
+              ),
+              ListItem(
+                checked: _value4,
+                onChange: _value4Changed,
+                text: "Evi havalandır",
+              ),
+              ListItem(
+                checked: _value5,
+                onChange: _value5Changed,
+                text: "Tuvalet sifonlarına bas",
+              ),
+              ListItem(
+                checked: _value6,
+                onChange: _value6Changed,
+                text: "Merdiven altını aç",
+              ),
+              ListItem(
+                checked: _value7,
+                onChange: _value7Changed,
+                text: "Bahçeyi sula",
+              ),
+              ListItem(
+                checked: _value8,
+                onChange: _value8Changed,
+                text: "Merdiven altını kilitle",
+              ),
+              ListItem(
+                checked: _value9,
+                onChange: _value9Changed,
+                text: "Camları kapat",
+              ),
+              ListItem(
+               checked: _value10,
+               onChange: _value10Changed,
+               text: "Şalteri indir",
+              ),
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: RaisedButton(
+                    child: Text("Kaydet"),
+                    onPressed: () {
+                      if (completed()) {
+                        Hive.box("timesheets").add(History(DateTime.now()));
+                        Navigator.pop(context);
+                      } else {
+                        _showDialog();
+                      }
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ));
   }
 
@@ -144,6 +146,24 @@ class _NewHistoryItemPageState extends State<NewHistoryItemPage> {
           ],
         );
       },
+    );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  final String text;
+  final bool checked;
+  final ValueChanged<bool> onChange;
+
+  const ListItem({Key key, this.checked, this.text, this.onChange}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CheckboxListTile(
+      value: checked,
+      onChanged: onChange,
+      title: Text(text),
+      controlAffinity: ListTileControlAffinity.leading,
     );
   }
 }
