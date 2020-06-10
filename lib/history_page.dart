@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'model/history.dart';
-
 class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,21 +30,15 @@ class HistoryPage extends StatelessWidget {
   }
 
   Widget _buildListView() {
-    final timesheetsBox = Hive.box("timesheets");
-
-    final List<History> historyList = List<History>();
-    timesheetsBox.toMap().forEach((key, value) {
-      historyList.add(value);
-    });
-    final reversedHistoryList = historyList.reversed.toList();
-
     return WatchBoxBuilder(
       box: Hive.box("timesheets"),
-      builder: (context, history) {
+      builder: (context, box) {
+        final List historyList = box.toMap().values.toList().reversed.toList();
+
         return ListView.builder(
-          itemCount: reversedHistoryList.length,
+          itemCount: historyList.length,
           itemBuilder: (context, index) {
-            final history = reversedHistoryList[index];
+            final history = historyList[index];
             return ListTile(
               title: Text(operationDate(history.time)),
             );
@@ -57,8 +49,11 @@ class HistoryPage extends StatelessWidget {
   }
 
   String operationDate(DateTime date) {
+    return date.toString();
+    /*
     var month = date.month.toString().padLeft(2, '0');
     var day = date.day.toString().padLeft(2, '0');
     return '$day.$month.${date.year}';
+    */
   }
 }
