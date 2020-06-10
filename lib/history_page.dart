@@ -41,6 +41,38 @@ class HistoryPage extends StatelessWidget {
             final history = historyList[index];
             return ListTile(
               title: Text(operationDate(history.time)),
+              trailing: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      // return object of type Dialog
+                      return AlertDialog(
+                        title: new Text("Uyarı"),
+                        content: new Text(
+                            "Silme işlemine devam etmek istiyor musun?"),
+                        actions: <Widget>[
+                          // usually buttons at the bottom of the dialog
+                          FlatButton(
+                            child: Text("Evet"),
+                            onPressed: () {
+                              box.deleteAt(historyList.length - 1 - index);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text("Hayır"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
             );
           },
         );
@@ -49,11 +81,8 @@ class HistoryPage extends StatelessWidget {
   }
 
   String operationDate(DateTime date) {
-    return date.toString();
-    /*
     var month = date.month.toString().padLeft(2, '0');
     var day = date.day.toString().padLeft(2, '0');
     return '$day.$month.${date.year}';
-    */
   }
 }
